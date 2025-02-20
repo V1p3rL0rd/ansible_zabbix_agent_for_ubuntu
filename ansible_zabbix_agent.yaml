@@ -1,0 +1,45 @@
+- name: Install Zabbix agent on clients
+  hosts: clients
+  become: yes
+  remote_user: tuxadm # Here insert your user for SSH connection
+  vars:
+    ansible_ssh_pass: Pass_12345 # Here insert your ssh user password
+    ansible_become_password: Pass_12345 # Here insert sudoer user password
+    zabbix_server_ip: 192.168.0.111 # Here insert your Zabbix server IP
+
+  tasks:
+    - name: Download Zabbix repository package
+      get_url:
+        url: "https://repo.zabbix.com/zabbix/7.2/release/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.2+ubuntu24.04_all.deb"
+        dest: /tmp/zabbix-release_latest_7.2+ubuntu24.04_all.deb
+
+    - name: Install Zabbix repository package
+      apt:
+        deb: /tmp/zabbix-release_latest_7.2+ubuntu24.04_all.deb
+        state: present
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Zabbix agent
+      apt:
+        name: zabbix-agent
+        state: present
+
+    - name: Configure Zabbix agent
+      lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^Server='
+        line: 'Server={{ zabbix_server_ip }}'
+
+    - name: Ensure Zabbix agent is running and enabled
+      systemd:
+        name: zabbix-agent
+        state: started
+        enabled: yes
+
+    - name: Restart Zabbix agent to apply configuration
+      systemd:
+        name: zabbix-agent
+        state: restarted
