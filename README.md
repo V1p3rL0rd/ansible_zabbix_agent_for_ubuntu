@@ -1,4 +1,4 @@
-# ansible_zabbix_agent_for_ubuntu
+# Ansible zabbix agent installer for ubuntu
 This simple Ansible playbook automaticaly install and confiure zabbix agents on Ubuntu hosts.
 
 The script is executed in several stages:
