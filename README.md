@@ -1,7 +1,7 @@
 # Ansible zabbix agent installer for ubuntu
-This simple Ansible playbook automaticaly install and confiure zabbix agents on Ubuntu hosts.
+This is a very simple Ansible playbook will help you to install and confiure zabbix agents on Ubuntu hosts.
 
-The script is executed in several stages:
+The playbook contains a several tasks:
 
 1) Download Zabbix repository package
 2) Install Zabbix repository package
